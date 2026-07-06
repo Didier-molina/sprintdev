@@ -33,7 +33,7 @@ public class UserServiceImpl implements IUserService {
     @Override
     public User obtainUserByUsername(String username) {
         return this.userRepo.findByUsername(username)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + username));
+                .orElseThrow(() -> new UserNameAlreadyExistException("Usuario no encontrado: " + username));
     }
 
     private boolean userExist(User user) {
