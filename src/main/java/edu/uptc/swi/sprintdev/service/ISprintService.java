@@ -1,5 +1,10 @@
 package edu.uptc.swi.sprintdev.service;
 
+import edu.uptc.swi.sprintdev.domain.Sprint;
+
+import java.util.List;
+
 public interface ISprintService {
-    //crear sprint (recibe sprint y user), buscar sprint (recibe user)
+    boolean createSprint(Sprint sprint);
+    List<Sprint> obtainMySprints(int userId);
 }

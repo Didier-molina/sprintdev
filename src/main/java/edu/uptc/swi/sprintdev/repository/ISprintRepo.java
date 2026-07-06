@@ -7,6 +7,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ISprintRepo {
-    @Query("SELECT s FROM Sprints s JOIN s.creator c WHERE c.userId = :userId ")
-    List<Sprint> findAllUserSprint(@Param("userId") int userId);
+    @Query("SELECT DISTINCT s FROM Sprint s LEFT JOIN s.readers r " +
+            "WHERE s.creator.id = :userId OR r.id = :userId")
+    List<Sprint> findAllUserSprints(@Param("userId") Long userId);
+
 }

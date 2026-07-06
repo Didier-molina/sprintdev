@@ -3,8 +3,9 @@ package edu.uptc.swi.sprintdev.service;
 import edu.uptc.swi.sprintdev.domain.User;
 import edu.uptc.swi.sprintdev.exceptions.UserNameAlreadyExistException;
 import edu.uptc.swi.sprintdev.repository.IUserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements IUserService {
@@ -13,6 +14,7 @@ public class UserServiceImpl implements IUserService {
     public UserServiceImpl(IUserRepo userRepo) {
         this.userRepo = userRepo;
     }
+
     @Override
     public boolean registerUser(User user) {
         if (!this.userExist(user)) {
@@ -24,20 +26,18 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public boolean loginUser(String userName, String password) {
-        User tempUser = this.userRepo.findByUsername(userName);
-        if (tempUser != null) {
-            return this.isCorrectPassword(tempUser, password);
-        }
-        return false;
+        Optional<User> tempUser = this.userRepo.findByUsername(userName);
+        return tempUser.filter(user -> this.isCorrectPassword(user, password)).isPresent();
     }
 
     @Override
     public User obtainUserByUsername(String username) {
-        return this.userRepo.findByUsername(username);
+        return this.userRepo.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado: " + username));
     }
 
     private boolean userExist(User user) {
-        return this.userRepo.findByUsername(user.getUserName()) != null;
+        return this.userRepo.findByUsername(user.getUserName()).isPresent();
     }
 
     private boolean isCorrectPassword(User user, String password) {
