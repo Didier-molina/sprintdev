@@ -135,7 +135,7 @@ String loginMessage = (String) session.getAttribute("loginmessage");
 
             ¿No tienes una cuenta?
 
-            <a href="${pageContext.request.contextPath}/regist">
+            <a href="${pageContext.request.contextPath}/registuser">
 
                 Regístrate
 
